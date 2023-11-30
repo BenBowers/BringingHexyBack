@@ -1,30 +1,33 @@
-import { StackContext, Api, EventBus } from "sst/constructs";
+import { RemovalPolicy } from "aws-cdk-lib";
+import { Api, StackContext, Table } from "sst/constructs";
 
 export function API({ stack }: StackContext) {
-  const bus = new EventBus(stack, "bus", {
-    defaults: {
-      retries: 10,
-    },
-  });
 
-  const api = new Api(stack, "api", {
-    defaults: {
-      function: {
-        bind: [bus],
+  const mealTable = new Table(stack, "MealTable", {
+    fields: {
+      jobId: "string",
+      mealId: "string",
+      imageLocation: "string",
+      jobStatus: "string",
+      mealPrompt: "string",
+      mealParameters: "string",
+      mealType: "string",
+    },
+    primaryIndex: { partitionKey: "mealId" },
+    cdk: {
+      table: {
+        removalPolicy: RemovalPolicy.DESTROY,
       },
     },
+  });
+
+  const api = new Api(stack, "Api", {
     routes: {
-      "GET /": "packages/functions/src/lambda.handler",
-      "GET /todo": "packages/functions/src/todo.list",
-      "POST /todo": "packages/functions/src/todo.create",
+      "GET    /mealStatus": "src/adaptors/primary/meal-status.handler",
     },
   });
-
-  bus.subscribe("todo.created", {
-    handler: "packages/functions/src/events/todo-created.handler",
-  });
-
   stack.addOutputs({
-    ApiEndpoint: api.url,
+    Api: api.url,
+    Table: mealTable.id,
   });
 }
