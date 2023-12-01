@@ -7,14 +7,16 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@types/aws-lambda':
-        specifier: ^8.10.130
-        version: 8.10.130
     devDependencies:
       '@tsconfig/node18':
         specifier: ^18.2.2
         version: 18.2.2
+      '@types/aws-lambda':
+        specifier: ^8.10.130
+        version: 8.10.130
+      '@types/node':
+        specifier: ^20.10.1
+        version: 20.10.1
       aws-cdk-lib:
         specifier: 2.110.1
         version: 2.110.1(constructs@10.3.0)
@@ -2582,7 +2584,7 @@ packages:
 
   /@types/aws-lambda@8.10.130:
     resolution: {integrity: sha512-HxTfLeGvD1wTJqIGwcBCpNmHKenja+We1e0cuzeIDFfbEj3ixnlTInyPR/81zAe0Ss/Ip12rFK6XNeMLVucOSg==}
-    dev: false
+    dev: true
 
   /@types/node@20.10.1:
     resolution: {integrity: sha512-T2qwhjWwGH81vUEx4EXmBKsTJRXFXNZTL4v0gi01+zyBmCwzE6TyHszqX01m+QHTEq+EZNo13NeJIdEqf+Myrg==}
