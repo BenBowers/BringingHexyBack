@@ -9,7 +9,9 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
