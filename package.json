@@ -13,8 +13,14 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
     "aws-cdk-lib": "2.110.1",
     "constructs": "10.3.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin@latest": "link:typescript-eslint/eslint-plugin@latest",
+    "parser@latest": "link:typescript-eslint/parser@latest",
+    "prettier": "3.1.0",
     "sst": "^2.36.7",
     "typescript": "^5.3.2",
     "@types/aws-lambda": "^8.10.130",
@@ -23,6 +29,5 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {
-  }
+  "dependencies": {}
 }
