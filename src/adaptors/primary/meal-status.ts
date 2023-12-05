@@ -1,11 +1,10 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 
-export const handler: APIGatewayProxyHandlerV2<Record<string, string>> = async (
-  event,
-  context
-) => {
-  console.log('hello');
+export const handler: APIGatewayProxyHandlerV2 = async (event, context) => {
   return {
-    message: 'hello',
+    statusCode: 400,
+    body: JSON.stringify({
+      message: 'Bad Request',
+    }),
   };
 };
