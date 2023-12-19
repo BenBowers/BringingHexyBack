@@ -4,7 +4,10 @@ import {
   aws_iam as iam,
 } from 'aws-cdk-lib';
 import { Config, Function, StackContext, Table } from 'sst/constructs';
+
 export function API({ stack, app }: StackContext) {
+  const apiKey = new Config.Secret(stack, 'API_KEY');
+
   const mealTable = new Table(stack, 'MealTable', {
     fields: {
       jobId: 'string',
@@ -26,6 +29,7 @@ export function API({ stack, app }: StackContext) {
   const auth = new Function(stack, 'lambdaAuth', {
     functionName: app.logicalPrefixedName('apiAuthorizer'),
     handler: 'src/adaptors/primary/api-authorizer.handler',
+    bind: [apiKey],
   });
   const mealStatusHandler = new Function(stack, 'mealStatusHandler', {
     functionName: app.logicalPrefixedName('mealStatusHandler'),

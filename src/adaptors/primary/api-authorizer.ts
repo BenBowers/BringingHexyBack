@@ -1,4 +1,5 @@
 import { APIGatewayAuthorizerHandler } from 'aws-lambda';
+import { Config } from 'sst/node/config';
 
 export const handler: APIGatewayAuthorizerHandler = async (event) => {
   if (event.type === 'TOKEN' && event.authorizationToken) {
@@ -9,7 +10,8 @@ export const handler: APIGatewayAuthorizerHandler = async (event) => {
         Statement: [
           {
             Action: 'execute-api:Invoke',
-            Effect: event.authorizationToken === 'abc' ? 'Allow' : 'Deny',
+            Effect:
+              event.authorizationToken === Config.API_KEY ? 'Allow' : 'Deny',
             Resource: event.methodArn,
           },
         ],

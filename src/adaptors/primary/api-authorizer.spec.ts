@@ -1,7 +1,14 @@
 import { APIGatewayRequestAuthorizerEvent } from 'aws-lambda';
 import context from 'aws-lambda-mock-context';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { handler } from './api-authorizer';
+
+vi.mock('sst/node/config', () => ({
+  Config: {
+    API_KEY: 'abc',
+  },
+}));
+
 describe('api-authorizer', () => {
   describe('Given the request contains the authorization token of abc', () => {
     it('will resolve to a policy that allows invokation of the desired endpoint', async () => {
