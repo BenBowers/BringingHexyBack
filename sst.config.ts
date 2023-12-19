@@ -15,7 +15,7 @@ export default {
 
   stacks(app) {
     app.setDefaultFunctionProps({
-      runtime: 'nodejs18.x',
+      runtime: 'nodejs20.x',
       insightsVersion:
         lambda.LambdaInsightsVersion.fromInsightVersionArn(LAMBDA_INSIGHTS_ARN),
       logRetention: 'one_month',

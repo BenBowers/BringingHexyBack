@@ -16,7 +16,7 @@
     "lint:fix": "eslint . --ext .ts --fix"
   },
   "devDependencies": {
-    "@tsconfig/node18": "^18.2.2",
+    "@tsconfig/node20": "^20.1.2",
     "@types/aws-lambda": "^8.10.130",
     "@types/node": "^20.10.1",
     "@typescript-eslint/eslint-plugin": "^6.13.1",

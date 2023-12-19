@@ -32,7 +32,7 @@ export function API({ stack, app }: StackContext) {
     handler: 'src/adaptors/primary/meal-status.handler',
   });
 
-  const api = new apigateway.SpecRestApi(stack, 'books-api', {
+  const api = new apigateway.SpecRestApi(stack, 'meal-api', {
     endpointTypes: [apigateway.EndpointType.REGIONAL],
     apiDefinition: apigateway.ApiDefinition.fromInline({
       openapi: '3.0.1',
