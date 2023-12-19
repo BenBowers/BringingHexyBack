@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 
 const apiUrl = Config.API_ENDPOINT;
 const tableName = Config.TABLE_NAME;
-const apiKey = 'abc';
+const apiKey = Config.API_KEY;
 
 const dynamoClient = new DynamoDBClient({});
 describe('meal-status', () => {
