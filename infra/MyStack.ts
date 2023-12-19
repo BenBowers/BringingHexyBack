@@ -68,6 +68,17 @@ export function API({ stack, app }: StackContext) {
                 EndpointAuthorizer: [],
               },
             ],
+            parameters: [
+              {
+                name: 'mealId',
+                description: 'A unique identifier for a meal',
+                in: 'query',
+                required: true,
+                schema: {
+                  type: 'string',
+                },
+              },
+            ],
             description: 'Returns the status of a meal job',
             responses: {
               '200': {
