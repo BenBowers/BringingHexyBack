@@ -8,6 +8,7 @@ import { Config } from 'sst/node/config';
 import { v4 as uuidv4 } from 'uuid';
 import { describe, expect, it } from 'vitest';
 import getJobStatus from '../../src/adaptors/secondary/job-status-dynamo';
+import MealNotFoundError from '../../src/errors/MealNotFoundError';
 import type { Meal, MealDetails } from './types';
 
 const tableName = Config.TABLE_NAME;
@@ -49,6 +50,15 @@ const withMeal = async (
 };
 
 describe('job-status-dynamo', () => {
+  describe.todo('Given a serverside error occured', () => {});
+  describe.todo('Given a meal without a job status', () => {});
+  describe('Given a meal that does not exist', () => {
+    it('rejects with a meal not found response', async () => {
+      await expect(getJobStatus('123')).rejects.toThrow(
+        new MealNotFoundError()
+      );
+    });
+  });
   describe('Given a meal exists in dynamo', () => {
     it('resolves the meal status when we request it', async () => {
       const mealDetails: MealDetails = {
