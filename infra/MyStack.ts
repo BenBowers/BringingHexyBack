@@ -1,6 +1,8 @@
 import {
+  CustomResource,
   RemovalPolicy,
   aws_apigateway as apigateway,
+  custom_resources as cr,
   aws_iam as iam,
 } from 'aws-cdk-lib';
 import { Config, Function, StackContext, Table } from 'sst/constructs';
@@ -36,6 +38,7 @@ export function API({ stack, app }: StackContext) {
     handler: 'src/adaptors/primary/meal-status.handler',
   });
 
+  const authorizerName = 'EndpointAuthorizer';
   const api = new apigateway.SpecRestApi(stack, 'meal-api', {
     endpointTypes: [apigateway.EndpointType.REGIONAL],
     apiDefinition: apigateway.ApiDefinition.fromInline({
@@ -114,6 +117,33 @@ export function API({ stack, app }: StackContext) {
     }),
   });
 
+  const getAuthorizerIdProvider = new cr.Provider(
+    stack,
+    'getAuthorizerProvider',
+    {
+      onEventHandler: new Function(stack, 'getAuthorizerIdHandler', {
+        handler: 'infra/custom-resources/get-api-authorizer-id/handler.handler',
+        permissions: [
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ['apigateway:GET'],
+            resources: [
+              `arn:aws:apigateway:${stack.region}::/restapis/${api.restApiId}/authorizers`,
+            ],
+          }),
+        ],
+      }),
+    }
+  );
+
+  const getAuthorizerId = new CustomResource(stack, 'getAuthorizerId', {
+    serviceToken: getAuthorizerIdProvider.serviceToken,
+    properties: {
+      restApiId: api.restApiId,
+      authorizerName: authorizerName,
+    },
+  });
+
   mealStatusHandler.grantInvoke(
     new iam.ServicePrincipal('apigateway.amazonaws.com', {
       conditions: {
@@ -131,7 +161,9 @@ export function API({ stack, app }: StackContext) {
     new iam.ServicePrincipal('apigateway.amazonaws.com', {
       conditions: {
         ArnLike: {
-          'aws:SourceArn': `arn:aws:execute-api:${app.region}:${app.account}:${api.restApiId}/authorizers/*`,
+          'aws:SourceArn': `arn:aws:execute-api:${app.region}:${app.account}:${
+            api.restApiId
+          }/authorizers/${getAuthorizerId.getAtt('id')}`,
         },
       },
     })
