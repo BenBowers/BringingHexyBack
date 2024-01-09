@@ -2,6 +2,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { Entity, Table } from 'dynamodb-toolbox';
 import { Config } from 'sst/node/config';
+import MealNotFoundError from '../../errors/MealNotFoundError';
 
 const tableName = Config.TABLE_NAME;
 
@@ -29,7 +30,9 @@ const meal = new Entity({
 });
 
 const getJobStatus = async (mealId: string): Promise<string> => {
-  return (await meal.get({ mealId })).Item?.jobStatus || '';
+  const mealItem = (await meal.get({ mealId })).Item;
+  if (!mealItem) throw new MealNotFoundError();
+  return mealItem.jobStatus || '';
 };
 
 export default getJobStatus;
