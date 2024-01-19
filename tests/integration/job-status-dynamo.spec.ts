@@ -51,7 +51,6 @@ const withMeal = async (
 };
 
 describe('job-status-dynamo', () => {
-  describe.todo('Given a serverside error occured', () => {});
   describe('Given a meal without a job status', () => {
     it('rejects with a server error with message', async () => {
       const mealDetails: MealDetails = {
