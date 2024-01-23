@@ -18,9 +18,8 @@ export const Meal = new Entity({
   name: 'Meal',
   attributes: {
     mealId: { type: 'string', partitionKey: true },
-    jobId: { type: 'string' },
     imageLocation: { type: 'string' },
-    jobStatus: { type: 'string' },
+    status: { type: 'string' },
     mealPrompt: { type: 'string' },
     mealParameters: { type: 'string' },
     mealType: { type: 'string' },

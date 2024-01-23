@@ -1,9 +1,10 @@
 import MealNotFoundError from '../../errors/MealNotFoundError';
 import ServerError from '../../errors/ServerError';
 
+import { MealStatus } from '../../../tests/integration/types';
 import { Meal } from '../../database/entities';
 
-const getJobStatus = async (mealId: string): Promise<string> => {
+export const getMealStatus = async (mealId: string): Promise<MealStatus> => {
   let mealItem;
   try {
     mealItem = (await Meal.get({ mealId })).Item;
@@ -14,8 +15,6 @@ const getJobStatus = async (mealId: string): Promise<string> => {
     throw new ServerError('UnknownError');
   }
   if (!mealItem) throw new MealNotFoundError();
-  if (!mealItem.jobStatus) throw new ServerError('job status not found');
-  return mealItem.jobStatus;
+  if (!mealItem.status) throw new ServerError('meal status not found');
+  return mealItem.status as MealStatus;
 };
-
-export default getJobStatus;

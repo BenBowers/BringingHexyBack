@@ -3,7 +3,7 @@ import { LimitExceededException } from '@aws-sdk/client-dynamodb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Meal } from '../../database/entities';
 import ServerError from '../../errors/ServerError';
-import getJobStatus from './job-status-dynamo';
+import { getMealStatus } from './meal-status-dynamo';
 
 describe('job-status-dynamo', () => {
   vi.mock('../../database/entities', () => ({ Meal: { get: vi.fn() } }));
@@ -23,7 +23,7 @@ describe('job-status-dynamo', () => {
           })
         );
 
-        await getJobStatus('43cde2d4-b9b6-400c-847a-66d314baf588').catch(
+        await getMealStatus('43cde2d4-b9b6-400c-847a-66d314baf588').catch(
           (error) => {
             expect(error).toBeInstanceOf(ServerError);
             expect(error.message).toEqual(
@@ -38,7 +38,7 @@ describe('job-status-dynamo', () => {
       it('should throw a ServerError with the message "Unknown error"', async () => {
         mealGetSpy.mockRejectedValue('Failed badly');
 
-        await getJobStatus('43cde2d4-b9b6-400c-847a-66d314baf588').catch(
+        await getMealStatus('43cde2d4-b9b6-400c-847a-66d314baf588').catch(
           (error) => {
             expect(error).toBeInstanceOf(ServerError);
             expect(error.message).toEqual('UnknownError');

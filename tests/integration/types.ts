@@ -1,9 +1,9 @@
-export type JobStatus = 'COMPLETED' | 'FAILED' | 'IN_PROGRESS' | 'PENDING';
+export type MealStatus = 'COMPLETED' | 'FAILED' | 'IN_PROGRESS' | 'PENDING';
 export type MealType = 'PIZZA';
 
 export type MealDetails = {
   imageLocation: string;
-  jobStatus: JobStatus;
+  status: MealStatus;
   mealPrompt: string;
   mealParameters: string;
   mealType: MealType;
