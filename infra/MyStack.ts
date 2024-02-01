@@ -35,7 +35,8 @@ export function API({ stack, app }: StackContext) {
   });
   const mealStatusHandler = new Function(stack, 'mealStatusHandler', {
     functionName: app.logicalPrefixedName('mealStatusHandler'),
-    handler: 'src/adaptors/primary/meal-status.handler',
+    handler:
+      'src/adaptors/primary/api-gw-lambda-event-meal-status-handler.handler',
   });
 
   const authorizerName = 'EndpointAuthorizer';
@@ -65,7 +66,7 @@ export function API({ stack, app }: StackContext) {
       paths: {
         '/mealStatus': {
           get: {
-            summary: 'Get meal job status',
+            summary: 'Get meal status',
             security: [
               {
                 EndpointAuthorizer: [],
@@ -82,7 +83,7 @@ export function API({ stack, app }: StackContext) {
                 },
               },
             ],
-            description: 'Returns the status of a meal job',
+            description: 'Returns the status of a meal',
             responses: {
               '200': {
                 description: 'OK',

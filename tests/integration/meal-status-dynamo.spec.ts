@@ -7,7 +7,7 @@ import { marshall } from '@aws-sdk/util-dynamodb';
 import { Config } from 'sst/node/config';
 import { v4 as uuidv4 } from 'uuid';
 import { describe, expect, it } from 'vitest';
-import getJobStatus from '../../src/adaptors/secondary/job-status-dynamo';
+import { getMealStatus } from '../../src/adaptors/secondary/meal-status-dynamo';
 import MealNotFoundError from '../../src/errors/MealNotFoundError';
 import ServerError from '../../src/errors/ServerError';
 import type { Meal, MealDetails } from './types';
@@ -51,7 +51,6 @@ const withMeal = async (
 };
 
 describe('job-status-dynamo', () => {
-  describe.todo('Given a serverside error occured', () => {});
   describe('Given a meal without a job status', () => {
     it('rejects with a server error with message', async () => {
       const mealDetails: MealDetails = {
@@ -61,15 +60,15 @@ describe('job-status-dynamo', () => {
         mealType: 'PIZZA',
       } as unknown as MealDetails;
       await withMeal(mealDetails, async (meal) => {
-        await expect(getJobStatus(meal.mealId)).rejects.toThrow(
-          new ServerError('job status not found')
+        await expect(getMealStatus(meal.mealId)).rejects.toThrow(
+          new ServerError('meal status not found')
         );
       });
     });
   });
   describe('Given a meal that does not exist', () => {
     it('rejects with a meal not found response', async () => {
-      await expect(getJobStatus('123')).rejects.toThrow(
+      await expect(getMealStatus('123')).rejects.toThrow(
         new MealNotFoundError()
       );
     });
@@ -78,14 +77,14 @@ describe('job-status-dynamo', () => {
     it('resolves the meal status when we request it', async () => {
       const mealDetails: MealDetails = {
         imageLocation: 's3://bucket/someimage.png',
-        jobStatus: 'COMPLETED',
+        status: 'COMPLETED',
         mealPrompt: 'Generate image pizzas',
         mealParameters: '{}',
         mealType: 'PIZZA',
       };
 
       await withMeal(mealDetails, async (meal) => {
-        await expect(getJobStatus(meal.mealId)).resolves.toEqual('COMPLETED');
+        await expect(getMealStatus(meal.mealId)).resolves.toEqual('COMPLETED');
       });
     });
   });

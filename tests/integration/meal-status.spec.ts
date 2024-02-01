@@ -72,7 +72,7 @@ describe('meal-status', () => {
       it.todo('responds status 404', () => {});
     });
     describe('and the user provides a meal id that exists', () => {
-      describe('given the meal id corresponds with a meal with job status COMPLETED', () => {
+      describe('given the meal id corresponds with a meal with status COMPLETED', () => {
         it.todo('responds status 200 with body COMPLETED', async () => {
           const mealId = '123';
 
@@ -80,10 +80,9 @@ describe('meal-status', () => {
             new PutItemCommand({
               TableName: tableName,
               Item: marshall({
-                jobId: '321',
                 mealId,
                 imageLocation: 's3://bucket/someimage.png',
-                jobStatus: 'COMPLETED',
+                status: 'COMPLETED',
                 mealPrompt: 'Generate image pizzas',
                 mealParameters: '{}',
                 mealType: 'PIZZA',
@@ -102,10 +101,10 @@ describe('meal-status', () => {
           expect(response.data).toEqual('COMPLETED');
         });
       });
-      describe('given the meal id corresponds with a meal with job status IN_PROGRESS', () => {
+      describe('given the meal id corresponds with a meal with a status IN_PROGRESS', () => {
         it.todo('responds status 200 with body IN_PROGRESS', () => {});
       });
-      describe('given the meal id corresponds with a meal with job status FAILED', () => {
+      describe('given the meal id corresponds with a meal with a status FAILED', () => {
         it.todo('responds status 200 with body FAILED', () => {});
       });
     });
