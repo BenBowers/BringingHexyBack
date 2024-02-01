@@ -1,4 +1,5 @@
 import MealNotFoundError from '@errors/MealNotFoundError';
+import ServerError from '@errors/ServerError';
 import { getMealStatus } from '@use-cases/get-meal-status';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -72,10 +73,22 @@ describe('meal-status', () => {
     });
 
     describe('and the use case rejects with "server error"', () => {
-      it.todo(
-        'returns an API GW response with a response code of 500',
-        () => {}
-      );
+      it('returns an API GW response with a response code of 500', async () => {
+        const event = {
+          queryStringParameters: {
+            mealId,
+          },
+        } as unknown as APIGatewayProxyEvent;
+
+        getMealStatusSpy.mockRejectedValue(new ServerError());
+
+        expect(
+          getMealStatusHandler(event, {} as Context, () => {})
+        ).resolves.toEqual({
+          statusCode: 500,
+          body: 'Server error',
+        });
+      });
     });
   });
 });
