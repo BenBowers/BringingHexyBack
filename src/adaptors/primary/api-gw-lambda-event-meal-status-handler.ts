@@ -5,11 +5,12 @@ export const getMealStatusHandler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent,
   context
 ) => {
-  getMealStatus(event?.queryStringParameters?.mealId as string);
+  const mealStatus = await getMealStatus(
+    event?.queryStringParameters?.mealId as string
+  );
+
   return {
-    statusCode: 400,
-    body: JSON.stringify({
-      message: 'Bad Request',
-    }),
+    statusCode: 200,
+    body: mealStatus,
   };
 };
