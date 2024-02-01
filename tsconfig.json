@@ -1,27 +1,16 @@
 {
   "extends": "@tsconfig/node20/tsconfig.json",
-  "exclude": [
-    "packages"
-  ],
+  "exclude": ["packages"],
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@infra/*": [
-        "./infra/*"
-      ],
-      "@adaptors/*": [
-        "./src/adaptors/*"
-      ],
-      "@use-cases/*": [
-        "./src/use-cases/*"
-      ],
-      "@tests/*": [
-        "./tests/*"
-      ]
+      "@/*": ["./src/*"],
+      "@adaptors/*": ["./src/adaptors/*"],
+      "@use-cases/*": ["./src/use-cases/*"],
+      "@errors/*": ["./src/errors/*"],
+      "@infra/*": ["./infra/*"],
+      "@tests/*": ["./tests/*"]
     }
-  },
+  }
 }

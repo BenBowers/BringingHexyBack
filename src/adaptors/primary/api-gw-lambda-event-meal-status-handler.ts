@@ -5,12 +5,19 @@ export const getMealStatusHandler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent,
   context
 ) => {
-  const mealStatus = await getMealStatus(
-    event?.queryStringParameters?.mealId as string
-  );
+  try {
+    const mealStatus = await getMealStatus(
+      event?.queryStringParameters?.mealId as string
+    );
 
-  return {
-    statusCode: 200,
-    body: mealStatus,
-  };
+    return {
+      statusCode: 200,
+      body: mealStatus,
+    };
+  } catch (error) {
+    return {
+      statusCode: 404,
+      body: 'Meal not found',
+    };
+  }
 };

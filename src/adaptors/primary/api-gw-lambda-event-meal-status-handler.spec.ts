@@ -1,3 +1,4 @@
+import MealNotFoundError from '@errors/MealNotFoundError';
 import { getMealStatus } from '@use-cases/get-meal-status';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -52,11 +53,24 @@ describe('meal-status', () => {
     });
 
     describe('and the use case rejects with "meal not found"', () => {
-      it.todo(
-        'returns an API GW response with a response code of 404',
-        () => {}
-      );
+      it('returns an API GW response with a response code of 404', async () => {
+        const event = {
+          queryStringParameters: {
+            mealId,
+          },
+        } as unknown as APIGatewayProxyEvent;
+
+        getMealStatusSpy.mockRejectedValue(new MealNotFoundError());
+
+        expect(
+          getMealStatusHandler(event, {} as Context, () => {})
+        ).resolves.toEqual({
+          statusCode: 404,
+          body: 'Meal not found',
+        });
+      });
     });
+
     describe('and the use case rejects with "server error"', () => {
       it.todo(
         'returns an API GW response with a response code of 500',
