@@ -1,9 +1,21 @@
+import { getMealStatus } from '@use-cases/get-meal-status';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
-import { describe, it } from 'vitest';
-import { handler } from './api-gw-lambda-event-meal-status-handler';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { MealStatus } from '../../../tests/integration/types';
+import { getMealStatusHandler } from './api-gw-lambda-event-meal-status-handler';
 const mealId = 'e8d94127-ec3d-4cbb-93e4-357d53f7daa4';
 
 describe('meal-status', () => {
+  vi.mock('@use-cases/get-meal-status.ts', () => ({
+    getMealStatus: vi.fn(),
+  }));
+
+  const getMealStatusSpy = vi.mocked(getMealStatus);
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
   describe('Given an API request containing a meal identifier', () => {
     it('invokes the use case passing the meal identifier', async () => {
       const event = {
@@ -12,7 +24,11 @@ describe('meal-status', () => {
         },
       } as unknown as APIGatewayProxyEvent;
 
-      await handler(event, {} as Context, () => {});
+      const mealStatus: MealStatus = 'COMPLETED';
+      getMealStatusSpy.mockResolvedValue(mealStatus);
+
+      await getMealStatusHandler(event, {} as Context, () => {});
+      expect(getMealStatusSpy).toBeCalledWith(mealId);
     });
     describe('and the use case resolves with a meal status', () => {
       it.todo(
