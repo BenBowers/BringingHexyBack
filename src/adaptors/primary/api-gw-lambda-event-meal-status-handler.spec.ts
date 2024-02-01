@@ -30,12 +30,27 @@ describe('meal-status', () => {
       await getMealStatusHandler(event, {} as Context, () => {});
       expect(getMealStatusSpy).toBeCalledWith(mealId);
     });
+
     describe('and the use case resolves with a meal status', () => {
-      it.todo(
-        'returns an API GW response with a response code of 200, and a body containing the meal status',
-        () => {}
-      );
+      it('returns an API GW response with a response code of 200, and a body containing the meal status', async () => {
+        const event = {
+          queryStringParameters: {
+            mealId,
+          },
+        } as unknown as APIGatewayProxyEvent;
+
+        const mealStatus: MealStatus = 'COMPLETED';
+        getMealStatusSpy.mockResolvedValue(mealStatus);
+
+        expect(
+          getMealStatusHandler(event, {} as Context, () => {})
+        ).resolves.toEqual({
+          statusCode: 200,
+          body: mealStatus,
+        });
+      });
     });
+
     describe('and the use case rejects with "meal not found"', () => {
       it.todo(
         'returns an API GW response with a response code of 404',
