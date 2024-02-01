@@ -17,6 +17,7 @@ export default defineConfig({
       '@infra': resolve(__dirname, 'infra'),
       '@adaptors': resolve(__dirname, 'src/adaptors'),
       '@use-cases': resolve(__dirname, 'src/use-cases'),
+      '@errors': resolve(__dirname, 'src/errors'),
       '@tests': resolve(__dirname, 'tests'),
     },
   },
