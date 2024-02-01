@@ -1,3 +1,4 @@
+import MealNotFoundError from '@errors/MealNotFoundError';
 import { getMealStatus } from '@use-cases/get-meal-status';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 
@@ -15,9 +16,15 @@ export const getMealStatusHandler: APIGatewayProxyHandler = async (
       body: mealStatus,
     };
   } catch (error) {
+    if (error instanceof MealNotFoundError) {
+      return {
+        statusCode: 404,
+        body: 'Meal not found',
+      };
+    }
     return {
-      statusCode: 404,
-      body: 'Meal not found',
+      statusCode: 500,
+      body: 'Server error',
     };
   }
 };
