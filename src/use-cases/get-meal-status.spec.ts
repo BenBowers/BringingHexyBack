@@ -2,6 +2,7 @@ import { beforeEach } from 'node:test';
 import { describe, expect, it, vi } from 'vitest';
 import { MealStatus } from '../../tests/integration/types';
 import { getMealStatus as getMealStatusDynamo } from '../adaptors/secondary/meal-status-dynamo';
+import MealNotFoundError from '../errors/MealNotFoundError';
 import { getMealStatus } from './get-meal-status';
 describe('get-meal-status', () => {
   vi.mock('../adaptors/secondary/meal-status-dynamo', () => ({
@@ -29,7 +30,12 @@ describe('get-meal-status', () => {
       });
     });
     describe('and the meal status dynamo secondary adapter rejects with a "meal not found" error', () => {
-      it.todo('rejects with the "meal not found" error', () => {});
+      it('rejects with the "meal not found" error', async () => {
+        getMealStatusDynamoSpy.mockRejectedValue(new MealNotFoundError());
+        await expect(getMealStatus(mealIdentifier)).rejects.toThrow(
+          new MealNotFoundError()
+        );
+      });
     });
     describe('and the meal status dynamo secondary adapter rejects with a server error', () => {
       it.todo('rejects with the server error', () => {});
